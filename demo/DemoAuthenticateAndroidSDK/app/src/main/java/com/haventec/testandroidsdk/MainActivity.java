@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
-import com.haventec.common.android.sdk.models.HaventecData;
+import com.haventec.authenticate.android.sdk.models.HaventecData;
 import com.haventec.testandroidsdk.model.UserDetails;
 
 import org.json.JSONException;

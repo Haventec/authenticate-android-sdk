@@ -9,7 +9,6 @@ import com.haventec.authenticate.android.sdk.models.HaventecAuthenticateResponse
 import com.haventec.authenticate.android.sdk.models.HaventecData;
 import com.haventec.common.android.sdk.api.HaventecCommon;
 import com.haventec.common.android.sdk.api.exceptions.HaventecCommonException;
-import com.haventec.common.android.sdk.helpers.HashingHelper;
 
 import org.json.JSONObject;
 
@@ -72,4 +71,6 @@ public class HaventecAuthenticate {
     public static HaventecData getData(Context context) throws HaventecAuthenticateException {
         return StorageHelper.getData(context);
     }
+
+
 }

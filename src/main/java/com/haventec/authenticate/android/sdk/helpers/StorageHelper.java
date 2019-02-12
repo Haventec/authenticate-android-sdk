@@ -14,8 +14,6 @@ import com.haventec.common.android.sdk.helpers.HashingHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
-
 public class StorageHelper {
 
     private static HaventecData data;
@@ -24,8 +22,6 @@ public class StorageHelper {
 
         try {
             SharedPreferences sharedPref = getSharedPreferences(context, username);
-
-            Map<String, ?> allPrefs = sharedPref.getAll();
 
             SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -99,8 +95,6 @@ public class StorageHelper {
         try {
             SharedPreferences sharedPref = getSharedPreferences(context);
 
-            Map<String, ?> allPrefs = sharedPref.getAll();
-
             SharedPreferences.Editor editor = sharedPref.edit();
 
             if ( response.getApplicationUuid() != null && !response.getApplicationUuid().isEmpty() ) {
@@ -142,8 +136,6 @@ public class StorageHelper {
     public static HaventecData getData(Context context) throws HaventecAuthenticateException {
         try {
             SharedPreferences sharedPref = getSharedPreferences(context);
-
-            Map<String, ?> allPrefs = sharedPref.getAll();
 
             if ( data == null ) {
                 data = new HaventecData();
