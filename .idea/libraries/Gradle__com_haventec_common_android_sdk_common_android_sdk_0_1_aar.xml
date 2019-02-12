@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.haventec.common.android.sdk:common-android-sdk:0.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/common-android-sdk-0.1.aar/86bb8743bf9a8268fa7ab0fe04fdb97f/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/common-android-sdk-0.1.aar/86bb8743bf9a8268fa7ab0fe04fdb97f/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/haventec/common/android/sdk/common-android-sdk/0.1/common-android-sdk-0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

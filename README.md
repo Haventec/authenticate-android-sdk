@@ -50,6 +50,11 @@ String hashedPin = HaventecAuthenticate.hashPin(pinCode, salt);
 The returned value is a Base64-encoding of the SHA-512 hash of the pinCode, along with the salt previously generated.
 This can be sent to the Haventec Authenticate endpoints that require a hashedPin, such as /authentication/activate/user
 
+## Demo app
+To run the Demo app, configure src/main/assets/app.properties with your Haventec Application and User details.
+See src/main/assets/app.properties.example for required properties
+Build the project as a normal Android app. The demo/DemoAuthenticateAndroidSDK folder can be opened as a project in Android Studio
+
 ## Development
 To build, run the following:
 ```

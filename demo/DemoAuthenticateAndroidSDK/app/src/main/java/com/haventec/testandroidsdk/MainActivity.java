@@ -1,5 +1,6 @@
 package com.haventec.testandroidsdk;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
-import com.haventec.testandroidsdk.model.DeviceDetails;
+import com.haventec.common.android.sdk.models.HaventecData;
 import com.haventec.testandroidsdk.model.UserDetails;
 
 import org.json.JSONException;
@@ -21,11 +22,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Properties;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,21 +34,19 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String applicationUuid = "c09dd8ef-823b-44e5-aa55-e48c39f1b32d";
-    private String apiKey = "53517059-8785-4288-87ed-d2002ca0b937";
-    private String haventecUsername = "justin";
-    private String haventecEmail = "justin.crosbie@haventec.com";
-    private String pinCode = "1234";
-    private String serverUrl = "https://api.haventec.com/authenticate/v1-2";
+    private String applicationUuid;
+    private String apiKey;
+    private String haventecUsername;
+    private String haventecEmail;
+    private String pinCode;
+    private String serverUrl;
 
-    private byte[] salt;
-    private String deviceUuid;
-    private String authKey;
     private String activationToken;
-    private String accessToken;
 
     private UserDetails userDetails;
-    private List<DeviceDetails> devices;
+
+    private final Context thisActivity = this;
+    private HaventecData haventecData;
 
     TextView titleView;
     TextView userUuidView;
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,8 +74,23 @@ public class MainActivity extends AppCompatActivity {
         lastLoginView = findViewById(R.id.lastLogin);
         dateCreatedView = findViewById(R.id.dateCreated);
 
+        Properties p = new Properties();
         try {
-            salt = HaventecAuthenticate.generateSalt();
+            p.load(getBaseContext().getAssets().open("app.properties"));
+
+            serverUrl = p.getProperty("serverUrl");
+            applicationUuid = p.getProperty("applicationUuid");
+            apiKey = p.getProperty("apiKey");
+            haventecUsername = p.getProperty("username");
+            haventecEmail = p.getProperty("email");
+            pinCode = p.getProperty("pinCode");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            HaventecAuthenticate.initializeStorage(thisActivity, haventecUsername);
         } catch (HaventecAuthenticateException e) {
             e.printStackTrace();
         }
@@ -119,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, jsonString);
 
-        System.out.println(jsonString);
-
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -143,27 +154,24 @@ public class MainActivity extends AppCompatActivity {
                 if (!response.isSuccessful())
                     throw new IOException("Unexpected code " + response);
 
-                Headers responseHeaders = response.headers();
-                for (int i = 0; i < responseHeaders.size(); i++) {
-                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                }
-
                 String jsonBodyStr = response.body().string();
-                System.out.println(jsonBodyStr);
 
                 try {
-                    JSONObject reader = new JSONObject(jsonBodyStr);
-                    deviceUuid = reader.getString("deviceUuid");
-                    activationToken = reader.getString("activationToken");
+                    JSONObject jsonData = new JSONObject(jsonBodyStr);
 
-                    System.out.println("ActivationToken = " + activationToken);
+                    activationToken = jsonData.getString("activationToken");
+
+                    try {
+                        HaventecAuthenticate.updateStorage(thisActivity, jsonData);
+                    } catch (HaventecAuthenticateException e) {
+                        e.printStackTrace();
+                    }
+
                     activateDevice();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }
@@ -171,20 +179,24 @@ public class MainActivity extends AppCompatActivity {
     private void activateDevice() {
 
         try {
-            String hashedPin = HaventecAuthenticate.hashPin(pinCode, salt);
+            try {
+                haventecData = HaventecAuthenticate.getData(thisActivity);
+            } catch (HaventecAuthenticateException e) {
+                e.printStackTrace();
+            }
+
+            String hashedPin = HaventecAuthenticate.hashPin(thisActivity, pinCode);
 
             String jsonString = "{"
                     + "\"applicationUuid\": \"" + applicationUuid + "\","
                     + "\"username\": \"" + haventecUsername + "\","
-                    + "\"deviceUuid\": \"" + deviceUuid + "\","
+                    + "\"deviceUuid\": \"" + haventecData.getDeviceUuid() + "\","
                     + "\"hashedPin\": \"" + hashedPin + "\","
                     + "\"activationToken\": \"" + activationToken + "\""
                     + "}";
 
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(JSON, jsonString);
-
-            System.out.println(jsonString);
 
             OkHttpClient client = new OkHttpClient();
 
@@ -206,32 +218,24 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String jsonBodyStr = response.body().string();
-                    System.out.println(jsonBodyStr);
 
                     if (!response.isSuccessful())
                         throw new IOException("Unexpected code " + response);
 
-                    Headers responseHeaders = response.headers();
-                    for (int i = 0; i < responseHeaders.size(); i++) {
-                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                    }
-
                     try {
-                        JSONObject reader = new JSONObject(jsonBodyStr);
-                        authKey = reader.getString("authKey");
+                        JSONObject jsonData = new JSONObject(jsonBodyStr);
 
-                        JSONObject tokenJsonObj = reader.getJSONObject("accessToken");
-                        accessToken = tokenJsonObj.getString("token");
-
-                        System.out.println("accessToken = " + accessToken);
+                        try {
+                            HaventecAuthenticate.updateStorage(thisActivity, jsonData);
+                        } catch (HaventecAuthenticateException e) {
+                            e.printStackTrace();
+                        }
 
                         getCurrentUser();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
             });
         } catch (HaventecAuthenticateException e) {
@@ -242,12 +246,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void getCurrentUser() {
 
+        try {
+            haventecData = HaventecAuthenticate.getData(thisActivity);
+        } catch (HaventecAuthenticateException e) {
+            e.printStackTrace();
+        }
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .addHeader("Content-type", "application/json")
                 .addHeader("x-api-key", apiKey)
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", "Bearer " + haventecData.getToken().getAccessToken())
                 .url(serverUrl + "/user/current")
                 .get()
                 .build();
@@ -263,92 +273,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String jsonBodyStr = response.body().string();
-                System.out.println(jsonBodyStr);
 
                 if (!response.isSuccessful())
                     throw new IOException("Unexpected code " + response);
 
-                Headers responseHeaders = response.headers();
-                for (int i = 0; i < responseHeaders.size(); i++) {
-                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                }
-
                 try {
-                    JSONObject reader = new JSONObject(jsonBodyStr);
-                    userDetails = new UserDetails(reader);
+                    JSONObject jsonData = new JSONObject(jsonBodyStr);
+                    userDetails = new UserDetails(jsonData);
 
                     runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-                        titleView.setText("Hello, " + userDetails.getUsername());
-                        userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
-                        lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin())));
-                        dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated())));
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                            titleView.setText("Hello, " + haventecData.getUsername());
+                            userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
+                            lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin())));
+                            dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated())));
                         }
                     });
 
-//                    getUserDevices();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }
-
-//    private void getUserDevices() {
-//
-//        OkHttpClient client = new OkHttpClient();
-//
-//        Request request = new Request.Builder()
-//                .addHeader("Content-type", "application/json")
-//                .addHeader("x-api-key", apiKey)
-//                .addHeader("Authorization", "Bearer " + accessToken)
-//                .url(serverUrl + "/user/" + userDetails.getUserUuid() + "/device")
-//                .get()
-//                .build();
-//
-//        okhttp3.Call call = client.newCall(request);
-//
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException throwable) {
-//                throwable.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String jsonBodyStr = response.body().string();
-//                System.out.println(jsonBodyStr);
-//
-//                if (!response.isSuccessful())
-//                    throw new IOException("Unexpected code " + response);
-//
-//                Headers responseHeaders = response.headers();
-//                for (int i = 0; i < responseHeaders.size(); i++) {
-//                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-//                }
-//
-//                try {
-//                    JSONObject reader = new JSONObject(jsonBodyStr);
-//                    JSONArray devicesJSONArray = reader.getJSONArray("devices");
-//
-//                    devices = new ArrayList<>();
-//                    for ( int i=0; devicesJSONArray!=null && i<devicesJSONArray.length(); i++ ) {
-//                        devices.add(new DeviceDetails(devicesJSONArray.getJSONObject(i)));
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//        });
-//    }
 }

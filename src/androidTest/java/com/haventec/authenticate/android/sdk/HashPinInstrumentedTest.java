@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class HashPinInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -28,8 +28,8 @@ public class ExampleInstrumentedTest {
         assertEquals("com.haventec.authenticate.android.sdk.test", appContext.getPackageName());
 
         try {
-            byte[] saltBytes = HaventecAuthenticate.generateSalt();
-            String hashPin = HaventecAuthenticate.hashPin("1234", saltBytes);
+            HaventecAuthenticate.initializeStorage(appContext, "testuser");
+            String hashPin = HaventecAuthenticate.hashPin(appContext, "1234");
             Assert.assertTrue(isValidPin(hashPin));
         } catch (HaventecAuthenticateException e) {
             fail();

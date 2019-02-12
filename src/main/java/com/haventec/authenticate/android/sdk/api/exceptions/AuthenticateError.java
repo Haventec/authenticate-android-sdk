@@ -3,10 +3,26 @@ package com.haventec.authenticate.android.sdk.api.exceptions;
 import com.haventec.authenticate.android.sdk.models.HaventecError;
 
 public enum AuthenticateError implements HaventecError {
+
     /**
-     * Encryption Errors
+     * General Errors
      */
-    HAVENTEC_COMMON_ERROR("AN-COMM-1001", "Haventec Common Error")
+    NOT_INITIALIZED("AS-INIT-1001", "the initialize function has not been called for the user"),
+
+    /**
+     * Haventec Common Errors
+     */
+    HAVENTEC_COMMON_ERROR("AS-COMM-1001", "Haventec Common Error"),
+
+    /**
+     * Storage Errors
+     */
+    STORAGE_ERROR("CM-STOR-1001", "Storage Error"),
+
+    /**
+     * JSON Errors
+     */
+    JSON_ERROR("CM-JSON-1001", "JSON Error")
     ;
 
 

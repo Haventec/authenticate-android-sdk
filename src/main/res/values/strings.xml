@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">common-client-android-sdk</string>
+    <string name="app_name">authenticate-client-android-sdk</string>
+    <string name="haventec_preference_last_user">haventec_last_user</string>
+    <string name="haventec_preference_file_key">HaventecPreferences</string>
+    <string name="haventec_preference_applicationuuid">haventec_applicationuuid</string>
+    <string name="haventec_preference_username">haventec_username</string>
+    <string name="haventec_preference_useruuid">haventec_useruuid</string>
+    <string name="haventec_preference_devicename">haventec_devicename</string>
+    <string name="haventec_preference_deviceuuid">haventec_deviceuuid</string>
+    <string name="haventec_preference_authkey">haventec_authkey</string>
+    <string name="haventec_preference_accesstoken">haventec_accesstoken</string>
+    <string name="haventec_preference_token_type">haventec_token_type</string>
+    <string name="haventec_preference_salt">haventec_salt</string>
 </resources>
