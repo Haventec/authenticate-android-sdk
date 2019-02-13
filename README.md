@@ -1,10 +1,10 @@
 # Haventec Authenticate Android SDK
 
-A collection of functions for native Android apps to facilitate client-side interaction with Haventec backend services.
+A collection of functions for native Android apps to facilitate the integration with Haventec Authenticate
 
 ## Installation
 
-The bundled .aar file can be imported into any Android project via the standard way of importing modules.
+The bundled .aar file can be imported into your Android project via the standard way of importing modules.
 
 If using gradle, add the following dependencies:
 
@@ -84,7 +84,7 @@ Build the project as a normal Android app. The demo/DemoAuthenticateAndroidSDK f
 ## Development
 To build, run the following:
 ```
-gradle clean build publish
+./gradlew clean build publish
 ```
 
 ## Contributors

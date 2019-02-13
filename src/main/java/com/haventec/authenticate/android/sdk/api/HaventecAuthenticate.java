@@ -1,6 +1,5 @@
 package com.haventec.authenticate.android.sdk.api;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.haventec.authenticate.android.sdk.api.exceptions.AuthenticateError;
