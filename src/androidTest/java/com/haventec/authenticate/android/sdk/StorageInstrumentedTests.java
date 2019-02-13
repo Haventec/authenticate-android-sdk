@@ -41,7 +41,7 @@ public class StorageInstrumentedTests {
         String testUserName2 = UUID.randomUUID().toString();
 
         try {
-            HaventecAuthenticate.initializeStorage(appContext, testUserName);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName);
             HaventecData haventecData = HaventecAuthenticate.getData(appContext);
 
             // First, test that values get set appropriately
@@ -77,6 +77,11 @@ public class StorageInstrumentedTests {
             Assert.assertNull(haventecData3.getUserUuid());
             Assert.assertNotNull(haventecData3.getToken().getAccessToken());
 
+            Assert.assertEquals(haventecData3.getAuthKey(), HaventecAuthenticate.getAuthKey(appContext));
+            Assert.assertEquals(haventecData3.getToken().getAccessToken(), HaventecAuthenticate.getAccessToken(appContext));
+            Assert.assertEquals(haventecData3.getDeviceUuid(), HaventecAuthenticate.getDeviceUuid(appContext));
+            Assert.assertEquals(haventecData3.getUsername(), HaventecAuthenticate.getUsername(appContext));
+
             String firstDeviceUuid = haventecData3.getDeviceUuid();
 
 
@@ -84,7 +89,7 @@ public class StorageInstrumentedTests {
             // Now test onboarding a second user
             //
 
-            HaventecAuthenticate.initializeStorage(appContext, testUserName2);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName2);
             HaventecData haventecData4 = HaventecAuthenticate.getData(appContext);
 
             Assert.assertEquals(testUserName2, haventecData4.getUsername());
@@ -121,7 +126,7 @@ public class StorageInstrumentedTests {
             // Now test that switching back to the first user retains the context, so we haven't lost any data
             //
 
-            HaventecAuthenticate.initializeStorage(appContext, testUserName);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName);
             HaventecData haventecData6 = HaventecAuthenticate.getData(appContext);
 
             String firstDeviceUuidAgain = haventecData6.getDeviceUuid();
@@ -130,6 +135,11 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(haventecData3.getAuthKey(), haventecData6.getAuthKey());
             Assert.assertEquals(haventecData3.getToken().getAccessToken(), haventecData6.getToken().getAccessToken());
+
+            Assert.assertEquals(haventecData6.getAuthKey(), HaventecAuthenticate.getAuthKey(appContext));
+            Assert.assertEquals(haventecData6.getToken().getAccessToken(), HaventecAuthenticate.getAccessToken(appContext));
+            Assert.assertEquals(haventecData6.getDeviceUuid(), HaventecAuthenticate.getDeviceUuid(appContext));
+            Assert.assertEquals(haventecData6.getUsername(), HaventecAuthenticate.getUsername(appContext));
 
         } catch (HaventecAuthenticateException e) {
             fail();
@@ -147,19 +157,19 @@ public class StorageInstrumentedTests {
         String testUserName2 = UUID.randomUUID().toString();
 
         try {
-            HaventecAuthenticate.initializeStorage(appContext, testUserName);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName);
             HaventecData haventecData = HaventecAuthenticate.getData(appContext);
 
             byte[] salt1 = haventecData.getSalt();
 
-            HaventecAuthenticate.initializeStorage(appContext, testUserName2);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName2);
             HaventecData haventecData2 = HaventecAuthenticate.getData(appContext);
 
             byte[] salt2 = haventecData2.getSalt();
 
             Assert.assertFalse(Arrays.equals(salt1, salt2));
 
-            HaventecAuthenticate.initializeStorage(appContext, testUserName);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName);
             HaventecData haventecData3 = HaventecAuthenticate.getData(appContext);
 
             byte[] salt3 = haventecData3.getSalt();
