@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            HaventecAuthenticate.initializeStorage(thisActivity, haventecUsername);
+            HaventecAuthenticate.initialiseStorage(thisActivity, haventecUsername);
         } catch (HaventecAuthenticateException e) {
             e.printStackTrace();
         }
