@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private String pinCode;
     private String serverUrl;
 
-    private String activationToken;
-
     private UserDetails userDetails;
 
     private final Context thisActivity = this;
@@ -134,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
 
+        // This demo App is calling directly Haventec Authenticate but a production App
+        //should instead send the request to the backend of your application
+        //Then the backend can add the x-api-key. The x-api-key is sensitive information and
+        //therefore must be secured in the the backend of your App. Please do not expose your apiKey!
         Request request = new Request.Builder()
                 .addHeader("Content-type", "application/json")
                 .addHeader("x-api-key", apiKey)
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonData = new JSONObject(jsonBodyStr);
 
-                    activationToken = jsonData.getString("activationToken");
+                    String activationToken = jsonData.getString("activationToken");
 
                     try {
                         HaventecAuthenticate.updateStorage(thisActivity, jsonData);
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    activateDevice();
+                    activateDevice(activationToken);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -176,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void activateDevice() {
+    private void activateDevice(String activationToken) {
 
         try {
             try {
@@ -189,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
             String jsonString = "{"
                     + "\"applicationUuid\": \"" + applicationUuid + "\","
-                    + "\"username\": \"" + haventecUsername + "\","
+                    + "\"username\": \"" + haventecData.getUsername() + "\","
                     + "\"deviceUuid\": \"" + haventecData.getDeviceUuid() + "\","
                     + "\"hashedPin\": \"" + hashedPin + "\","
                     + "\"activationToken\": \"" + activationToken + "\""
@@ -200,6 +202,10 @@ public class MainActivity extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
+            // This demo App is calling directly Haventec Authenticate but a production App
+            //should instead send the request to the backend of your application
+            //Then the backend can add the x-api-key. The x-api-key is sensitive information and
+            //therefore must be secured in the the backend of your App. Please do not expose your apiKey!
             Request request = new Request.Builder()
                     .addHeader("Content-type", "application/json")
                     .addHeader("x-api-key", apiKey)
@@ -254,6 +260,10 @@ public class MainActivity extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
 
+        // This demo App is calling directly Haventec Authenticate but a production App
+        //should instead send the request to the backend of your application
+        //Then the backend can add the x-api-key. The x-api-key is sensitive information and
+        //therefore must be secured in the the backend of your App. Please do not expose your apiKey!
         Request request = new Request.Builder()
                 .addHeader("Content-type", "application/json")
                 .addHeader("x-api-key", apiKey)
@@ -286,10 +296,10 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-                            titleView.setText("Hello, " + haventecData.getUsername());
+                            titleView.setText("Hello " + haventecData.getUsername() + ",");
                             userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
-                            lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin())));
-                            dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated())));
+                            lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin() * 1000)));
+                            dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated() * 1000)));
                         }
                     });
 
