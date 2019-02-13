@@ -28,27 +28,53 @@ This class has the following methods:
 ```
 public class HaventecAuthenticate {
 
-    public static byte[] generateSalt() throws HaventecAuthenticateException {
+    /**
+     * Storage and initialisation functions
+     */
+    public static void initialiseStorage(Context context, String username) throws HaventecAuthenticateException {
     }
 
-    public static String hashPin(String pin, byte[] salt) throws HaventecAuthenticateException {
+    public static void updateStorage(Context context, JSONObject jsonObject) throws HaventecAuthenticateException {
+    }
+
+    /**
+     * Hash a PIN code to send via Haventec endpoints
+     */
+    public static String hashPin(Context context, String pin) throws HaventecAuthenticateException {
+    }
+    
+    /**
+     * Access Haventec data required for Haventec endpoints
+     */
+    public static String getAccessToken(Context context) throws HaventecAuthenticateException {
+    }
+
+    public static String getAuthKey(Context context) throws HaventecAuthenticateException {
+    }
+
+    public static String getUsername(Context context) throws HaventecAuthenticateException {
+    }
+
+    public static String getDeviceUuid(Context context) throws HaventecAuthenticateException {
+    }
+
+    public static String getUserUuid(Context context) throws HaventecAuthenticateException {
     }
 }
 ```
 
-To initialize, call the generateSalt() method, and retain the returned value. This is required for hashing the PIN to generate the same hash each time.
-If you don't retain the value, you won't be able to authenticate and you will need to invoke the Authenticate /forgot-pin and /reset-pin flow.
-```
-byte[] saltBytes = HaventecAuthenticate.generateSalt();
-```
+Note, all of the methods require the Android Context as input.
 
-To hash the PIN, call the hashPin method:
-```
-String hashedPin = HaventecAuthenticate.hashPin(pinCode, salt);
-```
+To initialize, call the initializeStorage method. This provisions the device persisted storage for the username.
 
-The returned value is a Base64-encoding of the SHA-512 hash of the pinCode, along with the salt previously generated.
-This can be sent to the Haventec Authenticate endpoints that require a hashedPin, such as /authentication/activate/user
+Whenever you invoke a method that changes the authentication state of the device - add user, add device, activate user, 
+activate device, login - you must update the Haventec SDK storage, using updateStorage. 
+This can accept the JSONObject directly returned from any of these endpoints.
+There is an alternative implementation of this function that accepts an object that implements the HaventecAuthenticateResponse interface, for more custom interfacing.
+
+In order to authenticate with Haventec endpoints, a hashed version of the pincode is required, so the hashPin method is used for that.
+
+The rest of the methods provide easy access to the data that is required for the Haventec endpoints.
 
 ## Demo app
 To run the Demo app, configure src/main/assets/app.properties with your Haventec Application and User details.

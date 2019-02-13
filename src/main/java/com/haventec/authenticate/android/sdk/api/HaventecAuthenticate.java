@@ -1,5 +1,6 @@
 package com.haventec.authenticate.android.sdk.api;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.haventec.authenticate.android.sdk.api.exceptions.AuthenticateError;
@@ -35,14 +36,13 @@ public class HaventecAuthenticate {
         }
     }
 
-
     /**
-     * It initializes Haventec data storage for the username
+     * It initialises Haventec data storage for the username
      *
      * @return void
      */
-    public static void initializeStorage(Context context, String username) throws HaventecAuthenticateException {
-        StorageHelper.initialize(context, username);
+    public static void initialiseStorage(Context context, String username) throws HaventecAuthenticateException {
+        StorageHelper.initialise(context, username);
     }
 
     /**
@@ -72,5 +72,48 @@ public class HaventecAuthenticate {
         return StorageHelper.getData(context);
     }
 
+    /**
+     * It retrieves the Haventec JWT token in its current persisted state
+     *
+     * @return void
+     */
+    public static String getAccessToken(Context context) throws HaventecAuthenticateException {
+        return StorageHelper.getData(context).getToken().getAccessToken();
+    }
 
+    /**
+     * It retrieves the Haventec authKey in its current persisted state
+     *
+     * @return void
+     */
+    public static String getAuthKey(Context context) throws HaventecAuthenticateException {
+        return StorageHelper.getData(context).getAuthKey();
+    }
+
+    /**
+     * It retrieves the currently provisioned Haventec username in its current persisted state
+     *
+     * @return void
+     */
+    public static String getUsername(Context context) throws HaventecAuthenticateException {
+        return StorageHelper.getData(context).getUsername();
+    }
+
+    /**
+     * It retrieves the Haventec deviceuuid in its current persisted state
+     *
+     * @return void
+     */
+    public static String getDeviceUuid(Context context) throws HaventecAuthenticateException {
+        return StorageHelper.getData(context).getDeviceUuid();
+    }
+
+    /**
+     * It retrieves the Haventec userUuid in its current persisted state
+     *
+     * @return void
+     */
+    public static String getUserUuid(Context context) throws HaventecAuthenticateException {
+        return StorageHelper.getData(context).getUserUuid();
+    }
 }

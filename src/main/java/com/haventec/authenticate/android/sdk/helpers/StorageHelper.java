@@ -18,7 +18,7 @@ public class StorageHelper {
 
     private static HaventecData data;
 
-    public static void initialize(Context context, String username) throws HaventecAuthenticateException {
+    public static void initialise(Context context, String username) throws HaventecAuthenticateException {
 
         try {
             SharedPreferences sharedPref = getSharedPreferences(context, username);
