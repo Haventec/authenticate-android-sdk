@@ -1,6 +1,6 @@
 package com.haventec.authenticate.android.sdk.api.exceptions;
 
-import com.haventec.authenticate.android.sdk.models.HaventecError;
+import com.haventec.common.android.sdk.models.HaventecError;
 
 public enum AuthenticateError implements HaventecError {
 
@@ -35,7 +35,7 @@ public enum AuthenticateError implements HaventecError {
     }
 
     /**
-     * It prints the AutenticateError in a specific format.
+     * It prints the error in a specific format.
      *
      * @return
      */

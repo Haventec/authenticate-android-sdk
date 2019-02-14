@@ -1,22 +1,18 @@
 package com.haventec.authenticate.android.sdk.models;
 
-public class HaventecData implements HaventecAuthenticateResponse {
+public class HaventecData {
 
-    byte[] salt;
-    String applicationUuid;
-    String userUuid;
-    String username;
-    String deviceName;
-    String deviceUuid;
-    String authKey;
-    Token token;
+    private byte[] salt;
+    private String applicationUuid;
+    private String userUuid;
+    private String username;
+    private String deviceName;
+    private String deviceUuid;
+    private String authKey;
+    private Token token = new Token();
 
     public String getApplicationUuid() {
         return applicationUuid;
-    }
-
-    public void setApplicationUuid(String applicationUuid) {
-        this.applicationUuid = applicationUuid;
     }
 
     public String getUserUuid() {
@@ -68,17 +64,9 @@ public class HaventecData implements HaventecAuthenticateResponse {
     }
 
     public void setAccessToken(String accessToken) {
-        if ( this.token == null ) {
-            this.token = new Token();
-        }
-
         this.token.setAccessToken(accessToken);
     }
     public void setTokenType(String tokenType) {
-        if ( this.token == null ) {
-            this.token = new Token();
-        }
-
         this.token.setType(tokenType);
     }
 

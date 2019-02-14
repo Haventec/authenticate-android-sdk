@@ -2,8 +2,8 @@ package com.haventec.authenticate.android.sdk.models;
 
 public class Token {
 
-    String type;
-    String accessToken;
+    private String type;
+    private String accessToken;
 
     public String getType() {
         return type;

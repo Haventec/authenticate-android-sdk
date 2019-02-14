@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private UserDetails userDetails;
 
     private final Context thisActivity = this;
-    private HaventecData haventecData;
 
     TextView titleView;
     TextView userUuidView;
@@ -88,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
+            // This is the first call that you need to do in order to initialise
+            //the Storage for a specific user.
             HaventecAuthenticate.initialiseStorage(thisActivity, haventecUsername);
         } catch (HaventecAuthenticateException e) {
             e.printStackTrace();
@@ -181,18 +182,16 @@ public class MainActivity extends AppCompatActivity {
     private void activateDevice(String activationToken) {
 
         try {
-            try {
-                haventecData = HaventecAuthenticate.getData(thisActivity);
-            } catch (HaventecAuthenticateException e) {
-                e.printStackTrace();
-            }
-
+            // These three parameters are the one your backend application needs
+            //to send to Haventec Authenticate in order to activate the device.
             String hashedPin = HaventecAuthenticate.hashPin(thisActivity, pinCode);
+            String username = HaventecAuthenticate.getUsername(thisActivity);
+            String deviceUuid = HaventecAuthenticate.getDeviceUuid(thisActivity);
 
             String jsonString = "{"
                     + "\"applicationUuid\": \"" + applicationUuid + "\","
-                    + "\"username\": \"" + haventecData.getUsername() + "\","
-                    + "\"deviceUuid\": \"" + haventecData.getDeviceUuid() + "\","
+                    + "\"username\": \"" + username + "\","
+                    + "\"deviceUuid\": \"" + deviceUuid + "\","
                     + "\"hashedPin\": \"" + hashedPin + "\","
                     + "\"activationToken\": \"" + activationToken + "\""
                     + "}";
@@ -253,61 +252,62 @@ public class MainActivity extends AppCompatActivity {
     private void getCurrentUser() {
 
         try {
-            haventecData = HaventecAuthenticate.getData(thisActivity);
+            String accessToken = HaventecAuthenticate.getAccessToken(thisActivity);
+
+            OkHttpClient client = new OkHttpClient();
+
+            // This demo App is calling directly Haventec Authenticate but a production App
+            //should instead send the request to the backend of your application
+            //Then the backend can add the x-api-key. The x-api-key is sensitive information and
+            //therefore must be secured in the the backend of your App. Please do not expose your apiKey!
+            Request request = new Request.Builder()
+                    .addHeader("Content-type", "application/json")
+                    .addHeader("x-api-key", apiKey)
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .url(serverUrl + "/user/current")
+                    .get()
+                    .build();
+
+            okhttp3.Call call = client.newCall(request);
+
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException throwable) {
+                    throwable.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String jsonBodyStr = response.body().string();
+
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
+
+                    try {
+                        JSONObject jsonData = new JSONObject(jsonBodyStr);
+                        userDetails = new UserDetails(jsonData);
+
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                                titleView.setText("Hello " + userDetails.getUsername() + ",");
+                                userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
+                                lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin() * 1000)));
+                                dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated() * 1000)));
+                            }
+                        });
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (HaventecAuthenticateException e) {
             e.printStackTrace();
         }
-
-        OkHttpClient client = new OkHttpClient();
-
-        // This demo App is calling directly Haventec Authenticate but a production App
-        //should instead send the request to the backend of your application
-        //Then the backend can add the x-api-key. The x-api-key is sensitive information and
-        //therefore must be secured in the the backend of your App. Please do not expose your apiKey!
-        Request request = new Request.Builder()
-                .addHeader("Content-type", "application/json")
-                .addHeader("x-api-key", apiKey)
-                .addHeader("Authorization", "Bearer " + haventecData.getToken().getAccessToken())
-                .url(serverUrl + "/user/current")
-                .get()
-                .build();
-
-        okhttp3.Call call = client.newCall(request);
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException throwable) {
-                throwable.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String jsonBodyStr = response.body().string();
-
-                if (!response.isSuccessful())
-                    throw new IOException("Unexpected code " + response);
-
-                try {
-                    JSONObject jsonData = new JSONObject(jsonBodyStr);
-                    userDetails = new UserDetails(jsonData);
-
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-                            titleView.setText("Hello " + haventecData.getUsername() + ",");
-                            userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
-                            lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin() * 1000)));
-                            dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated() * 1000)));
-                        }
-                    });
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
+
 }
