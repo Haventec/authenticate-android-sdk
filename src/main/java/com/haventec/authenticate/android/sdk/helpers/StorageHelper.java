@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class StorageHelper {
 
-    private static HaventecData data;
+    private static HaventecData haventecDataCache;
 
     public static void initialise(Context context, String username) {
 
@@ -32,8 +32,8 @@ public class StorageHelper {
                 editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), HashingHelper.toBase64(salt));
             }
 
-            // Get the stored data and keep it in memory
-            data = getData(context);
+            // Get the stored haventecDataCache and keep it in memory
+            haventecDataCache = getData(context);
 
             editor.commit();
 
@@ -67,7 +67,7 @@ public class StorageHelper {
             // DeviceUuid
             String deviceUuid = getJSONString(jsonObject,"deviceUuid");
             if (deviceUuid != null && !deviceUuid.isEmpty() ) {
-                data.setDeviceUuid(deviceUuid);
+                haventecDataCache.setDeviceUuid(deviceUuid);
                 editor.putString(context.getString(
                         com.haventec.authenticate.android.sdk.R.string.haventec_preference_deviceuuid),
                         deviceUuid);
@@ -76,7 +76,7 @@ public class StorageHelper {
             // AutheKey
             String authKey = getJSONString(jsonObject,"authKey");
             if (authKey != null && !authKey.isEmpty() ) {
-                data.setAuthKey(authKey);
+                haventecDataCache.setAuthKey(authKey);
                 editor.putString(context.getString(
                         com.haventec.authenticate.android.sdk.R.string.haventec_preference_authkey),
                         authKey);
@@ -87,14 +87,14 @@ public class StorageHelper {
             if ( tokenJson != null ) {
                 String accessToken = getJSONString(tokenJson, "token");
                 if (accessToken != null && !accessToken.isEmpty() ) {
-                    data.setAccessToken(accessToken);
+                    haventecDataCache.setAccessToken(accessToken);
                     // We don't persist the access token
                 }
 
                 // AccessToken type
                 String accessTokenType = getJSONString(tokenJson, "type");
                 if (accessTokenType != null && !accessTokenType.isEmpty() ) {
-                    data.setTokenType(accessTokenType);
+                    haventecDataCache.setTokenType(accessTokenType);
                     // We don't persist the token type
                 }
             }
@@ -111,17 +111,17 @@ public class StorageHelper {
         try {
             SharedPreferences sharedPref = getSharedPreferences(context);
 
-            if ( data == null ) {
-                data = new HaventecData();
+            if ( haventecDataCache == null ) {
+                haventecDataCache = new HaventecData();
             }
 
-            data.setUsername(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_username), null));
-            data.setDeviceName(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_devicename), null));
-            data.setDeviceUuid(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_deviceuuid), null));
-            data.setAuthKey(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_authkey), null));
-            data.setSalt(HashingHelper.fromBase64(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), null)));
+            haventecDataCache.setUsername(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_username), null));
+            haventecDataCache.setDeviceName(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_devicename), null));
+            haventecDataCache.setDeviceUuid(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_deviceuuid), null));
+            haventecDataCache.setAuthKey(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_authkey), null));
+            haventecDataCache.setSalt(HashingHelper.fromBase64(sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), null)));
 
-            return data;
+            return haventecDataCache;
 
         } catch (Exception e) {
             throw new HaventecAuthenticateException(AuthenticateError.STORAGE_ERROR, e);
