@@ -1,0 +1,8 @@
+# These properties have to be configured in your application backend
+# and not at the frontend, we use it here at the frontend because
+# we just want to demo the authenticate SDK and we don't use any backend
+#
+# The apiKey is sensitive information, please don't expose it.
+serverUrl=https://api-demo.haventec.com/authenticate/v1-2
+applicationUuid=
+apiKey=
