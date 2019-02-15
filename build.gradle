@@ -6,6 +6,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
@@ -18,6 +20,10 @@ allprojects {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
 
 android {
     compileSdkVersion 28
@@ -50,8 +56,6 @@ dependencies {
 }
 
 
-apply plugin: 'maven-publish'
-
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "sources"
@@ -71,3 +75,30 @@ publishing {
         mavenLocal()
     }
 }
+
+ext {
+    organisation = 'haventec'
+    bintrayRepo = 'maven'
+    bintrayName = 'authenticate-android-sdk'
+
+    publishedGroupId = 'com.haventec.authenticate.android.sdk'
+    libraryName = 'authenticate-android-sdk'
+    artifact = 'authenticate-android-sdk'
+
+    libraryDescription = 'A collection of functions for native Android apps to facilitate the integration with Haventec Authenticate.'
+
+    siteUrl = 'https://github.com/Haventec/authenticate-android-sdk'
+    gitUrl = 'https://github.com/Haventec/authenticate-android-sdk.git'
+
+    libraryVersion = '0.1'
+
+    developerId = 'Haventec'
+    developerName = 'Haventec'
+    developerEmail = 'info@haventec.com'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://tldrlegal.com/license/mit-license'
+    allLicenses = ["MIT"]
+}
+
+apply from: 'bintray.gradle'

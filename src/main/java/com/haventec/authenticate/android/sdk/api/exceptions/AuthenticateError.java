@@ -37,7 +37,7 @@ public enum AuthenticateError implements HaventecError {
     /**
      * It prints the error in a specific format.
      *
-     * @return
+     * @return friendly String with information about the error code and the message
      */
     public String toString() {
         return " ErrorCode=" + this.getErrorCode() + ", Message=" +this.getMessage();
