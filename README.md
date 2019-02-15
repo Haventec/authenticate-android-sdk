@@ -22,12 +22,20 @@ import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 ```
 
 This class has the following methods:
-**initialiseStorage:** It initilises the Android Storage for a specific Haventec Authenticate user. Your app has to call this method once you know the username of the user.
-**updateStorage:** It updates the Android Storage with the new user details. Whenever your app invokes a method that changes the authentication state (add user, add device, activate user, activate device, or login), your app must update the Haventec SDK storage using this method.
-**hashPin:** It returns a SHA-512 Hashing of the PIN passed as argument. 
-**getAccessToken:** It returns the session access token of the current authenticated user.
-**getUsername:** It retrieves the username of the current user.
-**getDeviceUuid:** It retrieves the deviceUuid of the current user.
+
+ * **initialiseStorage:** It initilises the Android Storage for a specific Haventec Authenticate user. Your app has to call this method once you know the username of the user.
+
+* **updateStorage:** It updates the Android Storage with the new user details. Whenever your app invokes a method that changes the authentication state (add user, add device, activate user, activate device, or login), your app must update the Haventec SDK storage using this method.
+
+* **hashPin:** It returns a SHA-512 Hashing of the PIN passed as argument. 
+
+* **getAccessToken:** It returns the session access token of the current authenticated user from the Android Storage
+
+* **getAuthKey:** It returns the current authKey of the current user from the Android Storage
+
+* **getUsername:** It returns the username of the current user from the Android Storage.
+
+* **getDeviceUuid:** It returns the deviceUuid of the current user from the Android Storage
 
 
 ## Demo app
