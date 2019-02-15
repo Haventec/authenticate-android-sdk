@@ -9,7 +9,7 @@ The bundled .aar file can be imported into your Android project via the standard
 If using gradle, add the following dependencies:
 
 ```
-implementation "com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.1@aar"
+compile 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.1'
 ```
 
 Ensure to use the latest published version of the SDK
