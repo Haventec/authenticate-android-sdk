@@ -6,10 +6,28 @@ A collection of functions for native Android apps to facilitate the integration 
 
 The bundled .aar file can be imported into your Android project via the standard way of importing modules.
 
-If using gradle, add the following dependencies:
+If using gradle, add the following repository:
+```
+    repositories {
+        ...
+        ..
+        .
+        maven {
+            url  "https://haventec.bintray.com/maven"
+        }
+    }
+```    
+
+and the following dependencies:
 
 ```
-implementation 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.1'
+dependencies {
+   ...
+   ..
+   .
+   implementation 'com.haventec.common.android.sdk:common-android-sdk:0.1'
+   implementation 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.1'
+}
 ```
 
 Ensure to use the latest published version of the SDK[ ![Download](https://api.bintray.com/packages/haventec/maven/authenticate-android-sdk/images/download.svg?version=0.1) ](https://bintray.com/haventec/maven/authenticate-android-sdk/0.1/link)
