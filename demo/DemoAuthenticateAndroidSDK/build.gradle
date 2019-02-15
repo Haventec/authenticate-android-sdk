@@ -4,7 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url  "https://haventec.bintray.com/maven"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
