@@ -45,7 +45,7 @@ In order to run the Demo app you will need a free account in [Haventec Console d
 
 1. Create a personal app.properties file based on the template: 
 
-```cp src/main/assets/app.properties.example src/main/assets/app.properties```
+  ```cp src/main/assets/app.properties.example src/main/assets/app.properties```
 
 2. Fill in the "applicationUuid" and "apiKey" of your application into "app.properties"
 
