@@ -39,13 +39,16 @@ This class has the following methods:
 
 
 ## Demo app
-The demo app uses Haventec Authenticate directly but in a real scenario the frontend app should send request to your backend app and after adding some private details will communicate with Haventec Authenticate.
+The demo app uses Haventec Authenticate directly but in a real scenario the frontend app should send requests to your backend app and after adding some private details (at least the apiKey) will communicate with Haventec Authenticate.
 
-In order to run the Demo app you will need a free account in [Haventec Console demo](https://console-demo.haventec.com/orgsignup), if you already have one please [login here](https://console-demo.haventec.com/login). Finally create a Authenticate application in order to get your private details "applicationUuid" and "apiKey".
+In order to run the Demo app you will need a free account in [Haventec Console demo](https://console-demo.haventec.com/orgsignup), if you already have one please [login here](https://console-demo.haventec.com/login). Finally create an Authenticate application in order to get your application private details "applicationUuid" and "apiKey".
 
 1. Create a personal app.properties file based on the template: 
+
 ```cp src/main/assets/app.properties.example src/main/assets/app.properties```
+
 2. Fill in the "applicationUuid" and "apiKey" of your application into "app.properties"
+
 3. Open the folder demo/DemoAuthenticateAndroidSDK as a project in Android Studio and run the Android app
 
 ## Development
