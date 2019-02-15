@@ -44,8 +44,9 @@ The demo app uses Haventec Authenticate directly but in a real scenario the fron
 In order to run the Demo app you will need a free account in [Haventec Console demo](https://console-demo.haventec.com/orgsignup), if you already have one please [login here](https://console-demo.haventec.com/login). Finally create an Authenticate application in order to get your application private details "applicationUuid" and "apiKey".
 
 1. Create a personal app.properties file based on the template: 
-
-  ```cp src/main/assets/app.properties.example src/main/assets/app.properties```
+```
+cp src/main/assets/app.properties.example src/main/assets/app.properties
+```
 
 2. Fill in the "applicationUuid" and "apiKey" of your application into "app.properties"
 
