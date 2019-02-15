@@ -8,14 +8,14 @@ The bundled .aar file can be imported into your Android project via the standard
 
 If using gradle, add the following repository:
 ```
-    repositories {
-        ...
-        ..
-        .
-        maven {
-            url  "https://haventec.bintray.com/maven"
-        }
+repositories {
+    ...
+    ..
+    .
+    maven {
+        url  "https://haventec.bintray.com/maven"
     }
+}
 ```    
 
 and the following dependencies:
