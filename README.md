@@ -9,10 +9,10 @@ The bundled .aar file can be imported into your Android project via the standard
 If using gradle, add the following dependencies:
 
 ```
-implementation 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.1'
+implementation 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.2'
 ```
 
-Ensure to use the latest published version of the SDK[ ![Download](https://api.bintray.com/packages/haventec/maven/authenticate-android-sdk/images/download.svg?version=0.1) ](https://bintray.com/haventec/maven/authenticate-android-sdk/0.1/link)
+Ensure to use the latest published version of the SDK[ ![Download](https://api.bintray.com/packages/haventec/maven/authenticate-android-sdk/images/download.svg?version=0.2) ](https://bintray.com/haventec/maven/authenticate-android-sdk/0.2/link)
 
 ## Usage
 
@@ -23,7 +23,7 @@ import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 
 This class has the following methods:
 
- * **initialiseStorage:** It initilises the Android Storage for a specific Haventec Authenticate user. Your app has to call this method once you know the username of the user.
+ * **initialiseStorage:** It initialises the Android Storage for a specific Haventec Authenticate user. Your app has to call this method once you know the username of the user.
 
 * **updateStorage:** It updates the Android Storage with the new user details. Whenever your app invokes a method that changes the authentication state (add user, add device, activate user, activate device, or login), your app must update the Haventec SDK storage using this method.
 
@@ -36,7 +36,6 @@ This class has the following methods:
 * **getUsername:** It returns the username of the current user from the Android Storage.
 
 * **getDeviceUuid:** It returns the deviceUuid of the current user from the Android Storage
-
 
 ## Demo app
 The demo app uses Haventec Authenticate directly but in a real scenario the frontend app should send requests to your backend app and after adding some private details (at least the apiKey) will communicate with Haventec Authenticate.
@@ -58,9 +57,30 @@ To build, run the following:
 ./gradlew clean build publish
 ```
 
-## Contributors
+## Publish to bintray
+1. Make sure you have an account at bintray with enough privileges at the organisation Haventec
 
- - Justin Crosbie
+2. Configure your personal file local.properties with your username and the API Key of bintray
+```
+bintray.user=<your-username>
+bintray.apikey=<your-bintray-api-key>
+```
+
+3. Run the following two gradle commands in order to publish it to bintray
+```
+clean install
+``` 
+
+```
+bintrayUpload
+```
+
+4. Update the section "Installation" of this README file in order to point to the new release
+
+5. Update the dependencies at the demo App in order to use the new published aars and test it. This is the file to update:
+```
+./demo/DemoAuthenticateAndroidSDK/app/build.gradle
+```
 
 ## License
 
