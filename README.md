@@ -57,31 +57,6 @@ To build, run the following:
 ./gradlew clean build publish
 ```
 
-## Publish to bintray
-1. Make sure you have an account at bintray with enough privileges at the organisation Haventec
-
-2. Configure your personal file local.properties with your username and the API Key of bintray
-```
-bintray.user=<your-username>
-bintray.apikey=<your-bintray-api-key>
-```
-
-3. Run the following two gradle commands in order to publish it to bintray
-```
-clean install
-``` 
-
-```
-bintrayUpload
-```
-
-4. Update the section "Installation" of this README file in order to point to the new release
-
-5. Update the dependencies at the demo App in order to use the new published aars and test it. This is the file to update:
-```
-./demo/DemoAuthenticateAndroidSDK/app/build.gradle
-```
-
 ## License
 
 This code is available under the MIT license. A copy of the license can be found in the LICENSE file included with the distribution.
