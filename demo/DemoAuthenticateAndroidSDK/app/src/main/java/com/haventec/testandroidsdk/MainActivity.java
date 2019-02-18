@@ -545,10 +545,20 @@ public class MainActivity extends AppCompatActivity {
 
   private void userLogIn() {
         try {
+            // Set the name with upper case just to verify that the username is supported case insensitive
+            String username = HaventecAuthenticate.getUsername().toUpperCase();
+
+            try {
+                // This is the first call that you need to do in order to initialise
+                //the Storage for a specific user.
+                HaventecAuthenticate.initialiseStorage(thisActivity, username);
+            } catch (HaventecAuthenticateException e) {
+                e.printStackTrace();
+            }
+
             // These three parameters are the one your backend application needs
             //to send to Haventec Authenticate in order to log in.
             String hashedPin = HaventecAuthenticate.hashPin(userPin);
-            String username = HaventecAuthenticate.getUsername();
             String deviceUuid = HaventecAuthenticate.getDeviceUuid();
 
             String jsonString = "{"
