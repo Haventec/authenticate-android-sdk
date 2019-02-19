@@ -15,17 +15,16 @@ public class HaventecAuthenticate {
     /**
      *  It creates a Hash of the pin, along with the salt that is in Storage
      *
-     * @param context of the application
      * @param pin The chosen PIN in plain text
      * @return String Base64-encoded representation of the SHA-512 hashed pin and salt
      */
-    public static String hashPin(Context context, String pin) {
+    public static String hashPin(String pin) {
 
-        if ( StorageHelper.getData(context) == null || StorageHelper.getData(context).getSalt() == null ) {
+        if ( StorageHelper.getData() == null || StorageHelper.getData().getSalt() == null ) {
             throw new HaventecAuthenticateException(AuthenticateError.NOT_INITIALIZED);
         }
 
-        byte[] salt = StorageHelper.getData(context).getSalt();
+        byte[] salt = StorageHelper.getData().getSalt();
         try {
             return HaventecCommon.hashPin(pin, salt);
         } catch (HaventecCommonException e) {
@@ -55,40 +54,36 @@ public class HaventecAuthenticate {
     /**
      * It retrieves the Haventec JWT token in its current persisted state
      *
-     * @param context of the application
      * @return The current session access token of the authenticated user
      */
-    public static String getAccessToken(Context context) {
-        return StorageHelper.getData(context).getToken().getAccessToken();
+    public static String getAccessToken() {
+        return StorageHelper.getData().getToken().getAccessToken();
     }
 
     /**
      * It retrieves the Haventec authKey in its current persisted state
      *
-     * @param context of the application
      * @return The rolling Haventec authKey linked to the current Haventec deviceUuid
      */
-    public static String getAuthKey(Context context) {
-        return StorageHelper.getData(context).getAuthKey();
+    public static String getAuthKey() {
+        return StorageHelper.getData().getAuthKey();
     }
 
     /**
      * It retrieves the currently provisioned Haventec username in its current persisted state
      *
-     * @param context of the application
      * @return The Haventec username of the current user
      */
-    public static String getUsername(Context context) {
-        return StorageHelper.getData(context).getUsername();
+    public static String getUsername() {
+        return StorageHelper.getData().getUsername();
     }
 
     /**
      * It retrieves the Haventec deviceuuid in its current persisted state
      *
-     * @param context of the application
      * @return The Haventec deviceUuid of the current user
      */
-    public static String getDeviceUuid(Context context) {
-        return StorageHelper.getData(context).getDeviceUuid();
+    public static String getDeviceUuid() {
+        return StorageHelper.getData().getDeviceUuid();
     }
 }

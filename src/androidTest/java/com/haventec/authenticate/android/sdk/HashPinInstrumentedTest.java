@@ -29,7 +29,7 @@ public class HashPinInstrumentedTest {
 
         try {
             HaventecAuthenticate.initialiseStorage(appContext, "testuser");
-            String hashPin = HaventecAuthenticate.hashPin(appContext, "1234");
+            String hashPin = HaventecAuthenticate.hashPin("1234");
             Assert.assertTrue(isValidPin(hashPin));
         } catch (HaventecAuthenticateException e) {
             fail();
