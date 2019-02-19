@@ -6,10 +6,6 @@ import com.haventec.common.android.sdk.models.HaventecError;
 
 public class HaventecAuthenticateException extends HaventecException {
 
-    public HaventecAuthenticateException() {
-        super();
-    }
-
     public HaventecAuthenticateException(HaventecError haventecError, Throwable throwable) {
         super(haventecError, throwable);
     }
