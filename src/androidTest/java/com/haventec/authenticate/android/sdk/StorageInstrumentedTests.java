@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
-import com.haventec.authenticate.android.sdk.models.HaventecData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.Assert.fail;

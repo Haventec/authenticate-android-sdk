@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
-import com.haventec.authenticate.android.sdk.models.HaventecData;
 import com.haventec.testandroidsdk.model.UserDetails;
 
 import org.json.JSONException;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import java.util.UUID;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -193,11 +191,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                }
 
                 String jsonBodyStr = response.body().string();
+
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response + ", body=" + jsonBodyStr);
+                }
 
                 try {
                     JSONObject jsonData = new JSONObject(jsonBodyStr);
