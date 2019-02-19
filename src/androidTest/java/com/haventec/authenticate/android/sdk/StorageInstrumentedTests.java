@@ -42,141 +42,75 @@ public class StorageInstrumentedTests {
 
         try {
             HaventecAuthenticate.initialiseStorage(appContext, testUserName);
-            HaventecData haventecData = HaventecAuthenticate.getData(appContext);
 
             // First, test that values get set appropriately
 
-            Assert.assertEquals(testUserName, haventecData.getUsername());
-            Assert.assertNotNull(haventecData.getSalt());
-            Assert.assertNull(haventecData.getApplicationUuid());
-            Assert.assertNull(haventecData.getAuthKey());
-            Assert.assertNull(haventecData.getDeviceName());
-            Assert.assertNull(haventecData.getDeviceUuid());
-            Assert.assertNull(haventecData.getUserUuid());
-            Assert.assertNull(haventecData.getToken().getAccessToken());
+            Assert.assertEquals(testUserName, HaventecAuthenticate.getUsername());
+            Assert.assertNull(HaventecAuthenticate.getAuthKey());
+            Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
+            Assert.assertNull(HaventecAuthenticate.getAccessToken());
 
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(addDeviceResponseJson));
-            HaventecData haventecData2 = HaventecAuthenticate.getData(appContext);
 
-            Assert.assertNotNull(haventecData2.getSalt());
-            Assert.assertNull(haventecData2.getApplicationUuid());
-            Assert.assertNull(haventecData2.getAuthKey());
-            Assert.assertNull(haventecData2.getDeviceName());
-            Assert.assertNotNull(haventecData2.getDeviceUuid());
-            Assert.assertNull(haventecData2.getUserUuid());
-            Assert.assertNull(haventecData2.getToken().getAccessToken());
+            Assert.assertNotNull(HaventecAuthenticate.getDeviceUuid());
+            Assert.assertNull(HaventecAuthenticate.getAuthKey());
+            Assert.assertNull(HaventecAuthenticate.getAccessToken());
 
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(activateDeviceResponseJson));
-            HaventecData haventecData3 = HaventecAuthenticate.getData(appContext);
 
-            Assert.assertNotNull(haventecData3.getSalt());
-            Assert.assertNull(haventecData3.getApplicationUuid());
-            Assert.assertNotNull(haventecData3.getAuthKey());
-            Assert.assertNull(haventecData3.getDeviceName());
-            Assert.assertNotNull(haventecData3.getDeviceUuid());
-            Assert.assertNull(haventecData3.getUserUuid());
-            Assert.assertNotNull(haventecData3.getToken().getAccessToken());
+            Assert.assertNotNull(HaventecAuthenticate.getDeviceUuid());
+            Assert.assertNotNull(HaventecAuthenticate.getAuthKey());
+            Assert.assertNotNull(HaventecAuthenticate.getAccessToken());
 
-            Assert.assertEquals(haventecData3.getAuthKey(), HaventecAuthenticate.getAuthKey(appContext));
-            Assert.assertEquals(haventecData3.getToken().getAccessToken(), HaventecAuthenticate.getAccessToken(appContext));
-            Assert.assertEquals(haventecData3.getDeviceUuid(), HaventecAuthenticate.getDeviceUuid(appContext));
-            Assert.assertEquals(haventecData3.getUsername(), HaventecAuthenticate.getUsername(appContext));
-
-            String firstDeviceUuid = haventecData3.getDeviceUuid();
-
+            String firstUsername = HaventecAuthenticate.getUsername();
+            String firstAuthKey = HaventecAuthenticate.getAuthKey();
+            String firstDeviceUuid = HaventecAuthenticate.getDeviceUuid();
+            String firstAccessToken = HaventecAuthenticate.getAccessToken();
 
             //
             // Now test onboarding a second user
             //
 
             HaventecAuthenticate.initialiseStorage(appContext, testUserName2);
-            HaventecData haventecData4 = HaventecAuthenticate.getData(appContext);
 
-            Assert.assertEquals(testUserName2, haventecData4.getUsername());
-            Assert.assertNotNull(haventecData4.getSalt());
-            Assert.assertNull(haventecData4.getApplicationUuid());
-            Assert.assertNull(haventecData4.getAuthKey());
-            Assert.assertNull(haventecData4.getDeviceName());
-            Assert.assertNull(haventecData4.getDeviceUuid());
-            Assert.assertNull(haventecData4.getUserUuid());
-            Assert.assertNull(haventecData4.getToken().getAccessToken());
+            Assert.assertEquals(testUserName2, HaventecAuthenticate.getUsername());
+            Assert.assertNull(HaventecAuthenticate.getAuthKey());
+            Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
+            Assert.assertNull(HaventecAuthenticate.getAccessToken());
 
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(addDeviceResponseJson2));
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(activateDeviceResponseJson2));
 
-            HaventecData haventecData5 = HaventecAuthenticate.getData(appContext);
+            Assert.assertNotNull(HaventecAuthenticate.getAuthKey());
+            Assert.assertNotNull(HaventecAuthenticate.getDeviceUuid());
+            Assert.assertNotNull(HaventecAuthenticate.getAccessToken());
 
-            Assert.assertNotNull(haventecData5.getSalt());
-            Assert.assertNull(haventecData5.getApplicationUuid());
-            Assert.assertNotNull(haventecData5.getAuthKey());
-            Assert.assertNull(haventecData5.getDeviceName());
-            Assert.assertNotNull(haventecData5.getDeviceUuid());
-            Assert.assertNull(haventecData5.getUserUuid());
-            Assert.assertNotNull(haventecData5.getToken().getAccessToken());
-
-            String secondDeviceUuid = haventecData5.getDeviceUuid();
+            String secondUsername = HaventecAuthenticate.getUsername();
+            String secondAuthKey = HaventecAuthenticate.getAuthKey();
+            String secondDeviceUuid = HaventecAuthenticate.getDeviceUuid();
+            String secondAccessToken = HaventecAuthenticate.getAccessToken();
 
             Assert.assertNotEquals(firstDeviceUuid, secondDeviceUuid);
-
-            Assert.assertEquals(haventecData3.getAuthKey(), haventecData5.getAuthKey());
-            Assert.assertEquals(haventecData3.getToken().getAccessToken(), haventecData5.getToken().getAccessToken());
-
+            Assert.assertNotEquals(firstAuthKey, secondAuthKey);
+            Assert.assertNotEquals(firstAccessToken, secondAccessToken);
+            Assert.assertNotEquals(firstUsername, secondUsername);
 
             //
             // Now test that switching back to the first user retains the context, so we haven't lost any data
             //
 
             HaventecAuthenticate.initialiseStorage(appContext, testUserName);
-            HaventecData haventecData6 = HaventecAuthenticate.getData(appContext);
 
-            String firstDeviceUuidAgain = haventecData6.getDeviceUuid();
+            Assert.assertEquals(firstDeviceUuid, HaventecAuthenticate.getDeviceUuid());
 
-            Assert.assertEquals(firstDeviceUuid, firstDeviceUuidAgain);
-
-            Assert.assertEquals(haventecData3.getAuthKey(), haventecData6.getAuthKey());
-            Assert.assertEquals(haventecData3.getToken().getAccessToken(), haventecData6.getToken().getAccessToken());
-
-            Assert.assertEquals(haventecData6.getAuthKey(), HaventecAuthenticate.getAuthKey(appContext));
-            Assert.assertEquals(haventecData6.getToken().getAccessToken(), HaventecAuthenticate.getAccessToken(appContext));
-            Assert.assertEquals(haventecData6.getDeviceUuid(), HaventecAuthenticate.getDeviceUuid(appContext));
-            Assert.assertEquals(haventecData6.getUsername(), HaventecAuthenticate.getUsername(appContext));
+            Assert.assertEquals(firstAuthKey, HaventecAuthenticate.getAuthKey());
+            Assert.assertNull(HaventecAuthenticate.getAccessToken());
+            Assert.assertEquals(firstDeviceUuid, HaventecAuthenticate.getDeviceUuid());
+            Assert.assertEquals(firstUsername, HaventecAuthenticate.getUsername());
 
         } catch (HaventecAuthenticateException e) {
             fail();
         } catch (JSONException e) {
-            fail();
-        }
-    }
-
-    @Test
-    public void twoUsersTests() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        String testUserName = UUID.randomUUID().toString();
-        String testUserName2 = UUID.randomUUID().toString();
-
-        try {
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName);
-            HaventecData haventecData = HaventecAuthenticate.getData(appContext);
-
-            byte[] salt1 = haventecData.getSalt();
-
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName2);
-            HaventecData haventecData2 = HaventecAuthenticate.getData(appContext);
-
-            byte[] salt2 = haventecData2.getSalt();
-
-            Assert.assertFalse(Arrays.equals(salt1, salt2));
-
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName);
-            HaventecData haventecData3 = HaventecAuthenticate.getData(appContext);
-
-            byte[] salt3 = haventecData3.getSalt();
-
-            Assert.assertTrue(Arrays.equals(salt1, salt3));
-
-        } catch (HaventecAuthenticateException e) {
             fail();
         }
     }
