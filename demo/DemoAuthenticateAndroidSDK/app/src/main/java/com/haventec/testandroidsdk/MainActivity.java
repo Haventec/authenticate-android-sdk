@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     TextView dateCreatedView;
     TextView currentUsername;
     TextView deviceUuid;
+    TextView deviceName;
+    TextView userUuid;
     TextView deviceAuthKey;
     TextView newDeviceAuthKey;
 
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         dateCreatedView = findViewById(R.id.dateCreated);
         currentUsername = findViewById(R.id.currentUsername);
         deviceUuid = findViewById(R.id.deviceUuid);
+        deviceName = findViewById(R.id.deviceName);
+        userUuid = findViewById(R.id.userUuid);
         deviceAuthKey = findViewById(R.id.deviceAuthKey);
         newDeviceAuthKey = findViewById(R.id.newDeviceAuthKey);
 
@@ -91,10 +95,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         // Users have to type their username, and email
-        String username = "AndroidUser_1234";
+        String username = "AndroidUser_1210";
         String email = "android.user@mail.com";
+
+        titleView.setText("Hello " + username + ",");
+        deviceName.setText("Your device name is " + HaventecAuthenticate.getDeviceName() + ",");
+
         try {
             // This is the first call that you need to do in order to initialise
             //the Storage for a specific user.
@@ -459,8 +466,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-                                titleView.setText("Hello " + userDetails.getUsername() + ",");
-                                userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
+                                userUuidView.setText("Your userUuid is " + HaventecAuthenticate.getUserUuid());
                                 lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin() * 1000)));
                                 dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated() * 1000)));
 
@@ -472,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
                         });
 
                         // User logs out
-                        userLogOut();
+//                        userLogOut();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

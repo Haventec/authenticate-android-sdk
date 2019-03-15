@@ -81,7 +81,7 @@ public class StorageHelper {
                         deviceUuid);
             }
 
-            // AutheKey
+            // AuthKey
             String authKey = JsonHelper.getJSONString(jsonObject, "authKey");
             if (authKey != null && !authKey.isEmpty()) {
                 haventecDataCache.setAuthKey(authKey);
@@ -116,6 +116,10 @@ public class StorageHelper {
 
     public static HaventecData getData() {
             return haventecDataCache;
+    }
+
+    public static void clearAccessToken() {
+        haventecDataCache.setAccessToken(null);
     }
 
     private static void setCurrentUser(Context context, String normaliseUsername) {

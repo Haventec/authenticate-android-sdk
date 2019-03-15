@@ -17,12 +17,18 @@ public enum AuthenticateError implements HaventecError {
     /**
      * Storage Errors
      */
-    STORAGE_ERROR("CM-STOR-1001", "Storage Error"),
+    STORAGE_ERROR("AS-STOR-1001", "Storage Error"),
 
     /**
      * JSON Errors
      */
-    JSON_ERROR("CM-JSON-1001", "JSON Error")
+    JSON_ERROR("AS-JSON-1001", "JSON Error"),
+
+    /**
+     * JWT Errors
+     */
+    JWT_INVALID_ERROR("AS-TOKN-1001", "Invalid JWT Error"),
+    JWT_MALFORMED_CLAIMS_ERROR("AS-TOKN-1002", "Malformed claims Error")
     ;
 
 
