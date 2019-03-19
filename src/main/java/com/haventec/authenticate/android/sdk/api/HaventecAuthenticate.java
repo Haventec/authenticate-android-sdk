@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.haventec.authenticate.android.sdk.api.exceptions.AuthenticateError;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
+import com.haventec.authenticate.android.sdk.helpers.DeviceHelper;
 import com.haventec.authenticate.android.sdk.helpers.StorageHelper;
 import com.haventec.authenticate.android.sdk.helpers.TokenHelper;
 import com.haventec.common.android.sdk.api.HaventecCommon;
@@ -117,11 +118,11 @@ public class HaventecAuthenticate {
     }
 
     /**
-     * It retrieves the device name, as defined by the android.os.Build.MODEL value.
+     * It retrieves the device name, as defined by the android.os.Build.MANUFACTURER/android.os.Build.MODEL value.
      *
      * @return The deviceName of the current user
      */
     public static String getDeviceName() {
-        return android.os.Build.MODEL;
+        return DeviceHelper.getDeviceName();
     }
 }

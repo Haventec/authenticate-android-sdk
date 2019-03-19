@@ -2,12 +2,14 @@ package com.haventec.authenticate.android.sdk;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
 
+import org.jose4j.lang.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -49,6 +51,8 @@ public class StorageInstrumentedTests {
     String userUuid1 = "3e233bba-649a-4e28-a14e-da22b2192273";
     String userUuid2 = "eabbe40e-c45c-4b55-bb36-cd7d0fc0671c";
 
+    String thisDeviceName = Build.MANUFACTURER.substring(0, 1).toUpperCase() + Build.MANUFACTURER.substring(1) + " " +
+            android.os.Build.MODEL;
 
     @Before
     public void setup() {
@@ -66,7 +70,7 @@ public class StorageInstrumentedTests {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         Assert.assertNotNull(HaventecAuthenticate.getDeviceName());
-        Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+        Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
 
         try {
             HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
@@ -76,7 +80,7 @@ public class StorageInstrumentedTests {
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertNull(HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
 
@@ -98,7 +102,7 @@ public class StorageInstrumentedTests {
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertNull(HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
 
@@ -106,7 +110,7 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertEquals(deviceUuid1, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertNull(HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
@@ -115,7 +119,7 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertEquals(deviceUuid1, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertEquals(authKey1, HaventecAuthenticate.getAuthKey());
             Assert.assertEquals(accessToken1, HaventecAuthenticate.getAccessToken());
             Assert.assertEquals(userUuid1, HaventecAuthenticate.getUserUuid());
@@ -136,7 +140,7 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertEquals(deviceUuid1, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertEquals(authKey1, HaventecAuthenticate.getAuthKey());
             Assert.assertEquals(accessToken1, HaventecAuthenticate.getAccessToken());
             Assert.assertEquals(userUuid1, HaventecAuthenticate.getUserUuid());
@@ -145,7 +149,7 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertEquals(deviceUuid1, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertEquals(authKey1, HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
@@ -211,7 +215,7 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(testUserName1, HaventecAuthenticate.getUsername());
             Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertNull(HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
@@ -219,7 +223,7 @@ public class StorageInstrumentedTests {
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(addDeviceResponseJson));
 
             Assert.assertEquals(deviceUuid1, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertNull(HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
@@ -227,7 +231,7 @@ public class StorageInstrumentedTests {
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(activateDeviceResponseJson));
 
             Assert.assertEquals(deviceUuid1, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertEquals(authKey1, HaventecAuthenticate.getAuthKey());
             Assert.assertEquals(accessToken1, HaventecAuthenticate.getAccessToken());
             Assert.assertEquals(userUuid1, HaventecAuthenticate.getUserUuid());
@@ -246,7 +250,7 @@ public class StorageInstrumentedTests {
 
             Assert.assertEquals(testUserName2, HaventecAuthenticate.getUsername());
             Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertNull(HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
@@ -255,7 +259,7 @@ public class StorageInstrumentedTests {
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(activateDeviceResponseJson2));
 
             Assert.assertEquals(deviceUuid2, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertEquals(authKey2, HaventecAuthenticate.getAuthKey());
             Assert.assertEquals(accessToken2, HaventecAuthenticate.getAccessToken());
             Assert.assertEquals(userUuid2, HaventecAuthenticate.getUserUuid());
@@ -283,7 +287,7 @@ public class StorageInstrumentedTests {
             Assert.assertEquals(firstAuthKey, HaventecAuthenticate.getAuthKey());
             Assert.assertNull(HaventecAuthenticate.getAccessToken());
             Assert.assertEquals(firstDeviceUuid, HaventecAuthenticate.getDeviceUuid());
-            Assert.assertEquals(android.os.Build.MODEL, HaventecAuthenticate.getDeviceName());
+            Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
             Assert.assertEquals(firstUsername, HaventecAuthenticate.getUsername());
             Assert.assertNull(HaventecAuthenticate.getUserUuid());
 

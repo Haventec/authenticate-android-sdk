@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     TextView deviceAuthKey;
     TextView newDeviceAuthKey;
 
+    Button clearAccessTokenButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        clearAccessTokenButton = findViewById(R.id.clearAccessTokenButton);
+        clearAccessTokenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HaventecAuthenticate.clearAccessToken();
+
+                userUuidView.setText("Your userUuid is " + HaventecAuthenticate.getUserUuid());
             }
         });
 
@@ -96,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Users have to type their username, and email
-        String username = "AndroidUser_1210";
+        String username = "AndroidUser_" + new Date().getTime();
         String email = "android.user@mail.com";
 
         titleView.setText("Hello " + username + ",");

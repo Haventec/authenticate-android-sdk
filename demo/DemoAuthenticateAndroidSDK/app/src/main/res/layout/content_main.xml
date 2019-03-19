@@ -32,13 +32,6 @@
             />
 
         <TextView
-            android:id="@+id/userUuid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="loading..."
-            />
-
-        <TextView
             android:id="@+id/lastLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,11 +65,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="loading..." />
+
+        <TextView
+            android:id="@+id/userUuid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="loading..."
+            />
+
+        <Button
+            android:id="@+id/clearAccessTokenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Access Token"/>
+
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list_devices_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>
