@@ -16,9 +16,7 @@ repositories {
     ...
     ..
     .
-    maven {
-        url  "https://haventec.bintray.com/maven"
-    }
+    jcenter()
 }
 ```    
 
