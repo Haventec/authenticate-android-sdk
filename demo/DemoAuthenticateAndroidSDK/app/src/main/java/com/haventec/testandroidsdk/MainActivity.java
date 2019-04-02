@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
@@ -46,10 +47,13 @@ public class MainActivity extends AppCompatActivity {
     TextView userUuidView;
     TextView lastLoginView;
     TextView dateCreatedView;
-    TextView currentUsername;
-    TextView deviceUuid;
-    TextView deviceAuthKey;
-    TextView newDeviceAuthKey;
+    TextView currentUsernameView;
+    TextView deviceUuidView;
+    TextView deviceNameView;
+    TextView deviceAuthKeyView;
+    TextView newDeviceAuthKeyView;
+
+    Button clearAccessTokenButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +71,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        clearAccessTokenButton = findViewById(R.id.clearAccessTokenButton);
+        clearAccessTokenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HaventecAuthenticate.clearAccessToken();
+
+                userUuidView.setText("Your userUuid is " + HaventecAuthenticate.getUserUuid());
+            }
+        });
+
         titleView = findViewById(R.id.title);
         userUuidView = findViewById(R.id.userUuid);
         lastLoginView = findViewById(R.id.lastLogin);
         dateCreatedView = findViewById(R.id.dateCreated);
-        currentUsername = findViewById(R.id.currentUsername);
-        deviceUuid = findViewById(R.id.deviceUuid);
-        deviceAuthKey = findViewById(R.id.deviceAuthKey);
-        newDeviceAuthKey = findViewById(R.id.newDeviceAuthKey);
+        currentUsernameView = findViewById(R.id.currentUsername);
+        deviceUuidView = findViewById(R.id.deviceUuid);
+        deviceNameView = findViewById(R.id.deviceName);
+        deviceAuthKeyView = findViewById(R.id.deviceAuthKey);
+        newDeviceAuthKeyView = findViewById(R.id.newDeviceAuthKey);
 
 
         Properties p = new Properties();
@@ -91,10 +106,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         // Users have to type their username, and email
-        String username = "AndroidUser_1234";
+        String username = "AndroidUser_" + new Date().getTime();
         String email = "android.user@mail.com";
+
+        titleView.setText("Hello " + username + ",");
+        deviceNameView.setText("Your device name is " + HaventecAuthenticate.getDeviceName() + ",");
+
         try {
             // This is the first call that you need to do in order to initialise
             //the Storage for a specific user.
@@ -262,11 +280,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+
+                String jsonBodyStr = response.body().string();
+
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 }
-
-                String jsonBodyStr = response.body().string();
 
                 try {
                     JSONObject jsonData = new JSONObject(jsonBodyStr);
@@ -291,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
         String jsonString = "{"
                 + "\"applicationUuid\": \"" + applicationUuid + "\","
                 + "\"username\": \"" + username + "\","
-                + "\"deviceName\": \"Android Device\""
+                + "\"deviceNameView\": \"Android Device\""
                 + "}";
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -459,20 +478,19 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-                                titleView.setText("Hello " + userDetails.getUsername() + ",");
-                                userUuidView.setText("Your userUuid is " + userDetails.getUserUuid());
+                                userUuidView.setText("Your userUuid is " + HaventecAuthenticate.getUserUuid());
                                 lastLoginView.setText("Your lastLogin is " + sdf.format(new Date(userDetails.getLastLogin() * 1000)));
                                 dateCreatedView.setText("Your record was created on " + sdf.format(new Date(userDetails.getDateCreated() * 1000)));
 
                                 // Haventec Data
-                                currentUsername.setText("Current Username: " + HaventecAuthenticate.getUsername());
-                                deviceUuid.setText("Device UUID: " + HaventecAuthenticate.getDeviceUuid());
-                                deviceAuthKey.setText("Device AuthKey: " + HaventecAuthenticate.getAuthKey());
+                                currentUsernameView.setText("Current Username: " + HaventecAuthenticate.getUsername());
+                                deviceUuidView.setText("Device UUID: " + HaventecAuthenticate.getDeviceUuid());
+                                deviceAuthKeyView.setText("Device AuthKey: " + HaventecAuthenticate.getAuthKey());
                             }
                         });
 
                         // User logs out
-                        userLogOut();
+//                        userLogOut();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -526,7 +544,7 @@ public class MainActivity extends AppCompatActivity {
 
                           @Override
                           public void run() {
-                              newDeviceAuthKey.setText("New Device AuthKey: " + HaventecAuthenticate.getAuthKey());
+                              newDeviceAuthKeyView.setText("New Device AuthKey: " + HaventecAuthenticate.getAuthKey());
                           }
                       });
 
@@ -563,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
             String jsonString = "{"
                     + "\"applicationUuid\": \"" + applicationUuid + "\","
                     + "\"username\": \"" + username + "\","
-                    + "\"deviceUuid\": \"" + deviceUuid + "\","
+                    + "\"deviceUuidView\": \"" + deviceUuid + "\","
                     + "\"hashedPin\": \"" + hashedPin + "\","
                     + "\"authKey\": \"" + HaventecAuthenticate.getAuthKey() + "\""
                     + "}";
@@ -610,7 +628,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void run() {
-                                newDeviceAuthKey.setText("New Device AuthKey: " + HaventecAuthenticate.getAuthKey());
+                                newDeviceAuthKeyView.setText("New Device AuthKey: " + HaventecAuthenticate.getAuthKey());
                             }
                         });
                     } catch (JSONException e) {

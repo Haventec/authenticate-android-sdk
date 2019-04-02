@@ -4,10 +4,14 @@ import android.content.Context;
 
 import com.haventec.authenticate.android.sdk.api.exceptions.AuthenticateError;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
+import com.haventec.authenticate.android.sdk.helpers.DeviceHelper;
 import com.haventec.authenticate.android.sdk.helpers.StorageHelper;
+import com.haventec.authenticate.android.sdk.helpers.TokenHelper;
 import com.haventec.common.android.sdk.api.HaventecCommon;
 import com.haventec.common.android.sdk.api.exceptions.HaventecCommonException;
 
+import org.jose4j.jwt.MalformedClaimException;
+import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.json.JSONObject;
 
 public class HaventecAuthenticate {
@@ -61,12 +65,32 @@ public class HaventecAuthenticate {
     }
 
     /**
+     * It nulls the JWT accessToken data. This can be executed as part of a logout user flow,
+     * to ensure no further transactions can be executed.
+     * A subsequent updateStorage invocation on the response of a successful login will update the data.
+     *
+     * @return The current session access token of the authenticated user
+     */
+    public static void clearAccessToken() {
+        StorageHelper.clearAccessToken();
+    }
+
+    /**
      * It retrieves the Haventec authKey in its current persisted state
      *
      * @return The rolling Haventec authKey linked to the current Haventec deviceUuid
      */
     public static String getAuthKey() {
         return StorageHelper.getData().getAuthKey();
+    }
+
+    /**
+     * It retrieves the Haventec userUuid in its current persisted state
+     *
+     * @return The Haventec deviceUuid of the current user
+     */
+    public static String getUserUuid() {
+        return TokenHelper.getUserUuidFromJWT(getAccessToken());
     }
 
     /**
@@ -79,11 +103,20 @@ public class HaventecAuthenticate {
     }
 
     /**
-     * It retrieves the Haventec deviceuuid in its current persisted state
+     * It retrieves the Haventec deviceUuid in its current persisted state
      *
      * @return The Haventec deviceUuid of the current user
      */
     public static String getDeviceUuid() {
         return StorageHelper.getData().getDeviceUuid();
+    }
+
+    /**
+     * It retrieves the device name, as defined by the android.os.Build.MANUFACTURER/android.os.Build.MODEL value.
+     *
+     * @return The deviceName of the current user
+     */
+    public static String getDeviceName() {
+        return DeviceHelper.getDeviceName();
     }
 }

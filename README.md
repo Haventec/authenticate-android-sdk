@@ -2,6 +2,10 @@
 
 A collection of functions for native Android apps to facilitate the integration with Haventec Authenticate
 
+## Requirements
+
+Android 4.4 or later
+
 ## Installation
 
 The bundled .aar file can be imported into your Android project via the standard way of importing modules.
@@ -12,9 +16,7 @@ repositories {
     ...
     ..
     .
-    maven {
-        url  "https://haventec.bintray.com/maven"
-    }
+    jcenter()
 }
 ```    
 
