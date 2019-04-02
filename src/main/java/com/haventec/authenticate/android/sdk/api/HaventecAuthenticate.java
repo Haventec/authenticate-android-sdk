@@ -90,13 +90,7 @@ public class HaventecAuthenticate {
      * @return The Haventec deviceUuid of the current user
      */
     public static String getUserUuid() {
-        try {
-            return TokenHelper.getUserUuidFromJWT(getAccessToken());
-        } catch (InvalidJwtException e) {
-            throw new HaventecAuthenticateException(AuthenticateError.JWT_INVALID_ERROR, e);
-        } catch (MalformedClaimException e) {
-            throw new HaventecAuthenticateException(AuthenticateError.JWT_MALFORMED_CLAIMS_ERROR, e);
-        }
+        return TokenHelper.getUserUuidFromJWT(getAccessToken());
     }
 
     /**
