@@ -51,9 +51,9 @@ android {
     buildToolsVersion '28.0.3'
 }
 
-subprojects {
-    tasks.withType(Javadoc).all { enabled = false }
-}
+tasks.withType(Javadoc).all { enabled = false }
+
+
 
 dependencies {
     implementation 'commons-codec:commons-codec:1.3'
