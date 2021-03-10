@@ -10,8 +10,6 @@ import com.haventec.authenticate.android.sdk.helpers.TokenHelper;
 import com.haventec.common.android.sdk.api.HaventecCommon;
 import com.haventec.common.android.sdk.api.exceptions.HaventecCommonException;
 
-import org.jose4j.jwt.MalformedClaimException;
-import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.json.JSONObject;
 
 public class HaventecAuthenticate {
@@ -40,9 +38,10 @@ public class HaventecAuthenticate {
      * It initialises Haventec data storage for the username
      * @param context of the application
      * @param username The haventec username of the app user
+     * @param newSalt A flag to determine if the salt needs to be regenerated
      */
-    public static void initialiseStorage(Context context, String username) {
-        StorageHelper.initialise(context, username);
+    public static void initialiseStorage(Context context, String username, boolean newSalt) {
+        StorageHelper.initialise(context, username, newSalt);
     }
 
     /**

@@ -28,8 +28,24 @@ public class HashPinInstrumentedTest {
         assertEquals("com.haventec.authenticate.android.sdk.test", appContext.getPackageName());
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, "testuser");
-            String hashPin = HaventecAuthenticate.hashPin("1234");
+            HaventecAuthenticate.initialiseStorage(appContext, "testuser", false);
+            String hashPin = HaventecAuthenticate.hashPin("123 4");
+            Assert.assertTrue(isValidPin(hashPin));
+        } catch (HaventecAuthenticateException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void useAppContextNewSalt() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        assertEquals("com.haventec.authenticate.android.sdk.test", appContext.getPackageName());
+
+        try {
+            HaventecAuthenticate.initialiseStorage(appContext, "testuser", true);
+            String hashPin = HaventecAuthenticate.hashPin("123 4");
             Assert.assertTrue(isValidPin(hashPin));
         } catch (HaventecAuthenticateException e) {
             fail();

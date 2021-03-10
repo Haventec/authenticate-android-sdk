@@ -9,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
 
-import org.jose4j.lang.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -73,7 +72,7 @@ public class StorageInstrumentedTests {
         Assert.assertEquals(thisDeviceName, HaventecAuthenticate.getDeviceName());
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
             // First, test that values get set appropriately
 
@@ -95,7 +94,7 @@ public class StorageInstrumentedTests {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
             // First, test that values get set appropriately
 
@@ -134,7 +133,7 @@ public class StorageInstrumentedTests {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(addDeviceResponseJson));
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(activateDeviceResponseJson));
 
@@ -163,7 +162,7 @@ public class StorageInstrumentedTests {
     public void testUpdateStorage_Fail_Bad_Json() {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
         try {
             HaventecAuthenticate.updateStorage(appContext, new JSONObject(badJson));
@@ -173,29 +172,54 @@ public class StorageInstrumentedTests {
     }
 
     @Test
-    public void testHashPin_AlwaysProducesSameHashForPIN() {
+    public void testHashPin_DifferentAfterNewSalt() {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
         String hashPIN1 = HaventecAuthenticate.hashPin("1234");
         String hashPIN2 = HaventecAuthenticate.hashPin("1234");
 
         assertEquals(hashPIN1, hashPIN2);
 
-        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, true);
+
+        String hashPIN3 = HaventecAuthenticate.hashPin("1234");
+
+        assertNotEquals(hashPIN1, hashPIN3);
+
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
+
+        String hashPIN4 = HaventecAuthenticate.hashPin("1234");
+
+        assertEquals(hashPIN3, hashPIN4);
+
+    }
+
+    @Test
+    public void testHashPin_AlwaysProducesSameHashForPIN() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
+
+        String hashPIN1 = HaventecAuthenticate.hashPin("1234");
+        String hashPIN2 = HaventecAuthenticate.hashPin("1234");
+
+        assertEquals(hashPIN1, hashPIN2);
+
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
         String hashPIN3 = HaventecAuthenticate.hashPin("1234");
 
         assertEquals(hashPIN1, hashPIN3);
 
-        HaventecAuthenticate.initialiseStorage(appContext, testUserName2);
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName2, false);
 
         String hashPIN4 = HaventecAuthenticate.hashPin("1234");
 
         assertNotEquals(hashPIN1, hashPIN4);
 
-        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
         String hashPIN5 = HaventecAuthenticate.hashPin("1234");
 
@@ -209,7 +233,7 @@ public class StorageInstrumentedTests {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
             // First, test that values get set appropriately
 
@@ -246,7 +270,7 @@ public class StorageInstrumentedTests {
             // Now test onboarding a second user
             //
 
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName2);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName2, false);
 
             Assert.assertEquals(testUserName2, HaventecAuthenticate.getUsername());
             Assert.assertNull(HaventecAuthenticate.getDeviceUuid());
@@ -280,7 +304,7 @@ public class StorageInstrumentedTests {
             // Now test that switching back to the first user retains the context, so we haven't lost any data
             //
 
-            HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+            HaventecAuthenticate.initialiseStorage(appContext, testUserName1, false);
 
             Assert.assertEquals(firstDeviceUuid, HaventecAuthenticate.getDeviceUuid());
 
