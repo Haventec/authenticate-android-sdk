@@ -155,6 +155,8 @@ public class StorageHelper {
         editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_username), normaliseUsername);
 
         byte[] salt = HashingHelper.generateRandomSaltBytes();
+
         editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), HashingHelper.toBase64(salt));
+        editor.commit();
     }
 }

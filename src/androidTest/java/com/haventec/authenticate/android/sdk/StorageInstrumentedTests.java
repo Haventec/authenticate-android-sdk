@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.UnsupportedEncodingException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
@@ -172,7 +174,7 @@ public class StorageInstrumentedTests {
     }
 
     @Test
-    public void testHashPin_DifferentAfterNewSalt() {
+    public void testHashPin_DifferentAfterNewSalt() throws UnsupportedEncodingException {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
@@ -182,6 +184,7 @@ public class StorageInstrumentedTests {
 
         assertEquals(hashPIN1, hashPIN2);
 
+        HaventecAuthenticate.regenerateSalt(appContext, testUserName1);
         HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
 
         String hashPIN3 = HaventecAuthenticate.hashPin("1234");
