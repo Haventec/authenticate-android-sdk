@@ -12,6 +12,8 @@ import com.haventec.common.android.sdk.api.exceptions.HaventecCommonException;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 public class HaventecAuthenticate {
 
     /**
@@ -38,10 +40,9 @@ public class HaventecAuthenticate {
      * It initialises Haventec data storage for the username
      * @param context of the application
      * @param username The haventec username of the app user
-     * @param newSalt A flag to determine if the salt needs to be regenerated
      */
-    public static void initialiseStorage(Context context, String username, boolean newSalt) {
-        StorageHelper.initialise(context, username, newSalt);
+    public static void initialiseStorage(Context context, String username) {
+        StorageHelper.initialise(context, username);
     }
 
     /**
@@ -117,5 +118,16 @@ public class HaventecAuthenticate {
      */
     public static String getDeviceName() {
         return DeviceHelper.getDeviceName();
+    }
+
+    /**
+     *  This allows the functionality to rotate or regenerate the Salt used to hash a device PIN.
+     *
+     * @param context of the application
+     * @param username The haventec username of the app user
+     * @throws UnsupportedEncodingException if encoding the salt fails
+     */
+    public static void regenerateSalt(Context context, String username) throws UnsupportedEncodingException {
+        StorageHelper.regenerateSalt(context, username);
     }
 }

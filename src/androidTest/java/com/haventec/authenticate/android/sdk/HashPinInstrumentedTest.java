@@ -28,7 +28,7 @@ public class HashPinInstrumentedTest {
         assertEquals("com.haventec.authenticate.android.sdk.test", appContext.getPackageName());
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, "testuser", false);
+            HaventecAuthenticate.initialiseStorage(appContext, "testuser");
             String hashPin = HaventecAuthenticate.hashPin("123 4");
             Assert.assertTrue(isValidPin(hashPin));
         } catch (HaventecAuthenticateException e) {
@@ -44,7 +44,7 @@ public class HashPinInstrumentedTest {
         assertEquals("com.haventec.authenticate.android.sdk.test", appContext.getPackageName());
 
         try {
-            HaventecAuthenticate.initialiseStorage(appContext, "testuser", true);
+            HaventecAuthenticate.initialiseStorage(appContext, "testuser");
             String hashPin = HaventecAuthenticate.hashPin("123 4");
             Assert.assertTrue(isValidPin(hashPin));
         } catch (HaventecAuthenticateException e) {
