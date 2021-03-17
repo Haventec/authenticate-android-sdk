@@ -57,6 +57,8 @@ This class has the following methods:
 
 * **getDeviceUuid:** It returns the deviceUuid of the current user from the Android Storage
 
+* **regenerateSalt:** Allows the salt to be regenerated post-initialisation. This should be done whenever a new hashed PIN is created, e.g.on PIN reset or add new device
+
 ## Demo app
 The demo app uses Haventec Authenticate directly but in a real scenario the frontend app should send requests to your backend app and after adding some private details (at least the apiKey) will communicate with Haventec Authenticate.
 

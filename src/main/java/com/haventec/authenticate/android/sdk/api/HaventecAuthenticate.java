@@ -121,7 +121,7 @@ public class HaventecAuthenticate {
     }
 
     /**
-     *  This allows the functionality to rotate or regenerate the Salt used to hash a device PIN.
+     *  Allows the salt to be regenerated post-initialisation. This should be done whenever a new hashed PIN is created, e.g.on PIN reset or add new device
      *
      * @param context of the application
      * @param username The haventec username of the app user
