@@ -26,7 +26,7 @@ public class StorageHelper {
             setCurrentUser(context, normaliseUsername);
 
             // Initialise the user data at the Android Storage
-            initialiseUserPersistedData(context, normaliseUsername);
+            initialiseUserPersistedData(context, normaliseUsername, false);
 
             // Get the stored user data and keep it in memory
             initialiseUserCacheData(context, normaliseUsername);
@@ -35,16 +35,22 @@ public class StorageHelper {
         }
     }
 
-    private static void initialiseUserPersistedData(Context context, String normaliseUsername)
+    public static void regenerateSalt(Context context, String username) throws UnsupportedEncodingException {
+        initialiseUserPersistedData(context, username.toLowerCase(), true);
+    }
+
+    private static void initialiseUserPersistedData(Context context, String normaliseUsername, boolean regenerateSaltOnly)
             throws UnsupportedEncodingException {
         SharedPreferences sharedPref = getUserPreferences(context, normaliseUsername);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_username), normaliseUsername);
+        if ( !regenerateSaltOnly ) {
+            editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_username), normaliseUsername);
+        }
 
         // If the saltBits is null then we have to initialise it.
         String saltBase64 = sharedPref.getString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), null);
-        if (saltBase64 == null) {
+        if (saltBase64 == null || regenerateSaltOnly) {
             byte[] salt = HashingHelper.generateRandomSaltBytes();
             editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), HashingHelper.toBase64(salt));
         }
@@ -115,7 +121,7 @@ public class StorageHelper {
     }
 
     public static HaventecData getData() {
-            return haventecDataCache;
+        return haventecDataCache;
     }
 
     public static void clearAccessToken() {
@@ -143,20 +149,5 @@ public class StorageHelper {
 
     private static SharedPreferences getUserPreferences(Context context, String normaliseUsername) {
         return context.getSharedPreferences(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_file_key) + "_" + normaliseUsername, Context.MODE_PRIVATE);
-    }
-
-    public static void regenerateSalt(Context context, String username) throws UnsupportedEncodingException {
-
-        String normaliseUsername = username.toLowerCase();
-
-        SharedPreferences sharedPref = getUserPreferences(context, normaliseUsername);
-        SharedPreferences.Editor editor = sharedPref.edit();
-
-        editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_username), normaliseUsername);
-
-        byte[] salt = HashingHelper.generateRandomSaltBytes();
-
-        editor.putString(context.getString(com.haventec.authenticate.android.sdk.R.string.haventec_preference_salt), HashingHelper.toBase64(salt));
-        editor.commit();
     }
 }
