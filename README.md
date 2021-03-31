@@ -27,12 +27,12 @@ dependencies {
    ...
    ..
    .
-   implementation 'com.haventec.common.android.sdk:common-android-sdk:0.2'
-   implementation 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:0.2'
+   implementation 'com.haventec.common.android.sdk:common-android-sdk:0.3'
+   implementation 'com.haventec.authenticate.android.sdk:authenticate-android-sdk:1.0.5'
 }
 ```
 
-Ensure to use the latest published version of the SDK[ ![Download](https://api.bintray.com/packages/haventec/maven/authenticate-android-sdk/images/download.svg?version=0.2) ](https://bintray.com/haventec/maven/authenticate-android-sdk/0.2/link)
+Ensure to use the latest published version of the SDK[ ![Download](https://api.bintray.com/packages/haventec/maven/authenticate-android-sdk/images/download.svg?version=1.0.5) ](https://bintray.com/haventec/maven/authenticate-android-sdk/1.0.5/link)
 
 ## Usage
 
