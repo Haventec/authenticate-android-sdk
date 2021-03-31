@@ -10,9 +10,9 @@ import com.haventec.authenticate.android.sdk.helpers.TokenHelper;
 import com.haventec.common.android.sdk.api.HaventecCommon;
 import com.haventec.common.android.sdk.api.exceptions.HaventecCommonException;
 
-import org.jose4j.jwt.MalformedClaimException;
-import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public class HaventecAuthenticate {
 
@@ -118,5 +118,16 @@ public class HaventecAuthenticate {
      */
     public static String getDeviceName() {
         return DeviceHelper.getDeviceName();
+    }
+
+    /**
+     *  Allows the salt to be regenerated post-initialisation. This should be done whenever a new hashed PIN is created, e.g.on PIN reset or add new device
+     *
+     * @param context of the application
+     * @param username The haventec username of the app user
+     * @throws UnsupportedEncodingException if encoding the salt fails
+     */
+    public static void regenerateSalt(Context context, String username) throws UnsupportedEncodingException {
+        StorageHelper.regenerateSalt(context, username);
     }
 }

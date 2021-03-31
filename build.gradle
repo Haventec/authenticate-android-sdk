@@ -25,13 +25,13 @@ apply plugin: 'com.jfrog.bintray'
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
-        versionName "1.0.3"
+        versionName "1.0.5"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -48,7 +48,7 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '30.0.3'
 }
 
 tasks.withType(Javadoc).all { enabled = false }
@@ -75,9 +75,9 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.haventec.authenticate.android.sdk'
             artifactId 'authenticate-android-sdk'
-            version '0.4'
+            version '1.0.5'
             artifact(sourceJar)
-            artifact("$buildDir/outputs/aar/authenticate-android-sdk-0.4.aar")
+            artifact("$buildDir/outputs/aar/authenticate-android-sdk-1.0.5.aar")
         }
     }
     repositories {
@@ -99,7 +99,7 @@ ext {
     siteUrl = 'https://github.com/Haventec/authenticate-android-sdk'
     gitUrl = 'https://github.com/Haventec/authenticate-android-sdk.git'
 
-    libraryVersion = '0.4'
+    libraryVersion = '1.0.5'
 
     developerId = 'Haventec'
     developerName = 'Haventec'

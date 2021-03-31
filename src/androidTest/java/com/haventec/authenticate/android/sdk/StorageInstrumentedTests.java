@@ -9,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.haventec.authenticate.android.sdk.api.HaventecAuthenticate;
 import com.haventec.authenticate.android.sdk.api.exceptions.HaventecAuthenticateException;
 
-import org.jose4j.lang.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -17,6 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -170,6 +171,32 @@ public class StorageInstrumentedTests {
             fail();
         } catch (JSONException e) {
         }
+    }
+
+    @Test
+    public void testHashPin_DifferentAfterNewSalt() throws UnsupportedEncodingException {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+
+        String hashPIN1 = HaventecAuthenticate.hashPin("1234");
+        String hashPIN2 = HaventecAuthenticate.hashPin("1234");
+
+        assertEquals(hashPIN1, hashPIN2);
+
+        HaventecAuthenticate.regenerateSalt(appContext, testUserName1);
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+
+        String hashPIN3 = HaventecAuthenticate.hashPin("1234");
+
+        assertNotEquals(hashPIN1, hashPIN3);
+
+        HaventecAuthenticate.initialiseStorage(appContext, testUserName1);
+
+        String hashPIN4 = HaventecAuthenticate.hashPin("1234");
+
+        assertEquals(hashPIN3, hashPIN4);
+
     }
 
     @Test
